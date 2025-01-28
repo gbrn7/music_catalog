@@ -4,6 +4,10 @@ import (
 	"log"
 
 	"github.com/gbrn7/music_catalog/internal/configs"
+	membershipHandler "github.com/gbrn7/music_catalog/internal/handler/memberships"
+	"github.com/gbrn7/music_catalog/internal/models/memberships"
+	membershipsRepo "github.com/gbrn7/music_catalog/internal/repository/memberships"
+	membershipsSvc "github.com/gbrn7/music_catalog/internal/service/memberships"
 	"github.com/gbrn7/music_catalog/pkg/internalsql"
 	"github.com/gin-gonic/gin"
 )
@@ -31,7 +35,14 @@ func main() {
 		log.Fatalf("failed to connext to database, err: %+v", err)
 	}
 
-	r := gin.Default
+	db.AutoMigrate(&memberships.User{})
 
+	r := gin.Default()
+
+	membershipsRepo := membershipsRepo.NewRepository(db)
+	membershipsSvc := membershipsSvc.NewService(cfg, membershipsRepo)
+	membershipHandler := membershipHandler.NewHandler(r, membershipsSvc)
+
+	membershipHandler.RegisterRoute()
 	r.Run(cfg.Service.Port)
 }
