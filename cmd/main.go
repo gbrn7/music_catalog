@@ -8,8 +8,10 @@ import (
 	membershipHandler "github.com/gbrn7/music_catalog/internal/handler/memberships"
 	tracksHandler "github.com/gbrn7/music_catalog/internal/handler/tracks"
 	"github.com/gbrn7/music_catalog/internal/models/memberships"
+	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackActivities"
 	membershipsRepo "github.com/gbrn7/music_catalog/internal/repository/memberships"
 	"github.com/gbrn7/music_catalog/internal/repository/spotify"
+	trackactivitiesRepo "github.com/gbrn7/music_catalog/internal/repository/trackactivities"
 	membershipsSvc "github.com/gbrn7/music_catalog/internal/service/memberships"
 	"github.com/gbrn7/music_catalog/internal/service/tracks"
 	"github.com/gbrn7/music_catalog/pkg/httpclient"
@@ -41,6 +43,7 @@ func main() {
 	}
 
 	db.AutoMigrate(&memberships.User{})
+	db.AutoMigrate(&trackactivities.TrackActivity{})
 
 	r := gin.Default()
 
@@ -48,8 +51,10 @@ func main() {
 	spotifyOutbound := spotify.NewSpotifyOutbound(cfg, httpClient)
 
 	membershipsRepo := membershipsRepo.NewRepository(db)
+	trackAvtivitiesRepo := trackactivitiesRepo.NewRepository(db)
+
 	membershipsSvc := membershipsSvc.NewService(cfg, membershipsRepo)
-	trackSvc := tracks.NewService(spotifyOutbound)
+	trackSvc := tracks.NewService(spotifyOutbound, trackAvtivitiesRepo)
 
 	membershipHandler := membershipHandler.NewHandler(r, membershipsSvc)
 	membershipHandler.RegisterRoute()
