@@ -2,8 +2,9 @@ package configs
 
 type (
 	Config struct {
-		Service  Service
-		Database Database
+		Service       Service
+		Database      Database
+		SpotifyConfig SpotifyConfig
 	}
 
 	Service struct {
@@ -13,5 +14,10 @@ type (
 
 	Database struct {
 		DataSourceName string
+	}
+
+	SpotifyConfig struct {
+		ClientID     string
+		ClientSecret string
 	}
 )
