@@ -3,3 +3,7 @@ service:
 
 database:
   dataSourceName: "postgres://admin:root@localhost:5432/fastcampus_db?sslmode=disable"
+
+spotifyConfig:
+  clientID: "f9dcd9d0ce134064832e1e5892f78812"
+  clientSecret: "671db42eac8c4432b70aacacdf0d8cdf"
