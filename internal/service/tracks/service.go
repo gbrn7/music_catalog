@@ -3,13 +3,14 @@ package tracks
 import (
 	"context"
 
-	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackActivities"
+	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackactivities"
 	"github.com/gbrn7/music_catalog/internal/repository/spotify"
 )
 
 //go:generate mockgen -source=service.go -destination=service_mock_test.go -package=tracks
 type spotifyOutbound interface {
 	Search(ctx context.Context, query string, limit, offset int) (*spotify.SpotifySearchResponse, error)
+	GetRecommendation(ctx context.Context, limit int, trackID string) (*spotify.SpotifyRecommendationResponse, error)
 }
 
 type trackActivitiesRepository interface {

@@ -9,38 +9,35 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func (s *service) Search(ctx context.Context, query string, pageSize, pageIndex int, userID uint) (*spotify.SearchResponse, error) {
-	limit := pageSize
-	offSet := (pageIndex - 1) * pageSize
-
-	trackDetails, err := s.spotifyOutbound.Search(ctx, query, limit, offSet)
+func (s *service) GetRecommendation(ctx context.Context, userID uint, limit int, trackID string) (*spotify.RecommendationResponse, error) {
+	trackDetails, err := s.spotifyOutbound.GetRecommendation(ctx, limit, trackID)
 	if err != nil {
-		log.Error().Err(err).Msg("error search track to spotify")
+		log.Error().Err(err).Msg("error get recommendation from spotify outbound")
 		return nil, err
 	}
 
-	trackIDs := make([]string, len(trackDetails.Tracks.Items))
-	for idx, item := range trackDetails.Tracks.Items {
+	trackIDs := make([]string, len(trackDetails.Tracks))
+	for idx, item := range trackDetails.Tracks {
 		trackIDs[idx] = item.ID
 	}
 
 	trackActivities, err := s.trackActivitiesRepo.GetBulkBySpotifyIDs(ctx, userID, trackIDs)
 	if err != nil {
-		log.Error().Err(err).Msg("error search activities from database")
-
+		log.Error().Err(err).Msg("error get track activities from database")
+		return nil, err
 	}
 
-	return modelToResponse(trackDetails, trackActivities), nil
+	return modelToRecommendationResponse(trackDetails, trackActivities), nil
 }
 
-func modelToResponse(data *spotifyRepo.SpotifySearchResponse, mapTrackActivities map[string]trackactivities.TrackActivity) *spotify.SearchResponse {
+func modelToRecommendationResponse(data *spotifyRepo.SpotifyRecommendationResponse, mapTrackActivities map[string]trackactivities.TrackActivity) *spotify.RecommendationResponse {
 	if data == nil {
 		return nil
 	}
 
 	items := make([]spotify.SpotifyTrackObject, 0)
 
-	for _, item := range data.Tracks.Items {
+	for _, item := range data.Tracks {
 		artistsName := make([]string, len(item.Artists))
 		for idx, artist := range item.Artists {
 			artistsName[idx] = artist.Name
@@ -64,10 +61,7 @@ func modelToResponse(data *spotifyRepo.SpotifySearchResponse, mapTrackActivities
 		})
 	}
 
-	return &spotify.SearchResponse{
-		Limit:  data.Tracks.Limit,
-		Offset: data.Tracks.Offset,
-		Items:  items,
-		Total:  data.Tracks.Total,
+	return &spotify.RecommendationResponse{
+		Items: items,
 	}
 }

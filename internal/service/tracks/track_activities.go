@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackActivities"
+	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackactivities"
 	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
