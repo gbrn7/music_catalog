@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/gbrn7/music_catalog/internal/models/spotify"
-	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackActivities"
+	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackactivities"
 	"github.com/gbrn7/music_catalog/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -13,6 +13,7 @@ import (
 type service interface {
 	Search(ctx context.Context, query string, pageSize, pageIndex int, userID uint) (*spotify.SearchResponse, error)
 	UpsertTrackActivities(ctx context.Context, userID uint, request trackactivities.TrackActivityRequest) error
+	GetRecommendation(ctx context.Context, userID uint, limit int, trackID string) (*spotify.RecommendationResponse, error)
 }
 
 type Handler struct {
@@ -32,4 +33,5 @@ func (h *Handler) RegisterRoute() {
 	route.Use(middleware.AuthMiddleware())
 	route.GET("/search", h.Search)
 	route.POST("/track-activity", h.UpsertTrackActivities)
+	route.GET("/recommendations", h.GetRecommendation)
 }

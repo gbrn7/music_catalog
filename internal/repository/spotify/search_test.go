@@ -163,6 +163,7 @@ func Test_outbound_Search(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			tt.mockFn(tt.args)
 			o := &outbound{
 				cfg:         &configs.Config{},
 				client:      mockHTTPClient,

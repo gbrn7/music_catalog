@@ -3,7 +3,7 @@ package trackactivities
 import (
 	"context"
 
-	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackActivities"
+	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackactivities"
 )
 
 func (r *repository) Create(ctx context.Context, model trackactivities.TrackActivity) error {

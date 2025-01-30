@@ -14,7 +14,7 @@ import (
 	reflect "reflect"
 
 	spotify "github.com/gbrn7/music_catalog/internal/models/spotify"
-	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackActivities"
+	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackactivities"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -40,6 +40,21 @@ func NewMockservice(ctrl *gomock.Controller) *Mockservice {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *Mockservice) EXPECT() *MockserviceMockRecorder {
 	return m.recorder
+}
+
+// GetRecommendation mocks base method.
+func (m *Mockservice) GetRecommendation(ctx context.Context, userID uint, limit int, trackID string) (*spotify.RecommendationResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetRecommendation", ctx, userID, limit, trackID)
+	ret0, _ := ret[0].(*spotify.RecommendationResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetRecommendation indicates an expected call of GetRecommendation.
+func (mr *MockserviceMockRecorder) GetRecommendation(ctx, userID, limit, trackID any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRecommendation", reflect.TypeOf((*Mockservice)(nil).GetRecommendation), ctx, userID, limit, trackID)
 }
 
 // Search mocks base method.

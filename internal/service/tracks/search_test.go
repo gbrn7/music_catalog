@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/gbrn7/music_catalog/internal/models/spotify"
-	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackActivities"
+	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackactivities"
 	spotifyRepo "github.com/gbrn7/music_catalog/internal/repository/spotify"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"

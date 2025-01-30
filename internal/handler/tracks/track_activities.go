@@ -3,7 +3,7 @@ package tracks
 import (
 	"net/http"
 
-	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackActivities"
+	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackactivities"
 	"github.com/gin-gonic/gin"
 )
 

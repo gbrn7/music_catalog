@@ -18,14 +18,13 @@ type SpotifyTokenResponse struct {
 
 func (o *outbound) GetTokenDetails() (string, string, error) {
 	if o.AccessToken == "" || time.Now().After(o.ExpiredAt) {
-		//call spotify api token here
+		// call spotify api token here
 		err := o.generateToken()
 		if err != nil {
 			return "", "", err
 		}
 	}
 	return o.AccessToken, o.TokenType, nil
-
 }
 
 func (o *outbound) generateToken() error {
@@ -36,8 +35,7 @@ func (o *outbound) generateToken() error {
 
 	encodedURL := formData.Encode()
 
-	req, err := http.NewRequest(http.MethodPost, "https://accounts.spotify.com/api/token", strings.NewReader(encodedURL))
-
+	req, err := http.NewRequest(http.MethodPost, `https://accounts.spotify.com/api/token`, strings.NewReader(encodedURL))
 	if err != nil {
 		log.Error().Err(err).Msg("error create request for spotify")
 		return err
@@ -50,7 +48,6 @@ func (o *outbound) generateToken() error {
 		log.Error().Err(err).Msg("error execute request for spotify")
 		return err
 	}
-
 	defer resp.Body.Close()
 
 	var response SpotifyTokenResponse
@@ -63,6 +60,5 @@ func (o *outbound) generateToken() error {
 	o.AccessToken = response.AccessToken
 	o.TokenType = response.TokenType
 	o.ExpiredAt = time.Now().Add(time.Duration(response.ExpiresIn) * time.Second)
-
 	return nil
 }

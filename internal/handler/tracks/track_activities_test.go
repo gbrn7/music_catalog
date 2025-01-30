@@ -8,7 +8,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackActivities"
+	trackactivities "github.com/gbrn7/music_catalog/internal/models/trackactivities"
 	"github.com/gbrn7/music_catalog/pkg/jwt"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
